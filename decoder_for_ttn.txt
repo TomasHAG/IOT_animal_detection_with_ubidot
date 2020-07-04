@@ -1,0 +1,41 @@
+function round(input, places) {
+  var factor = 1;
+  if(0 < places){
+    var counter = 0;
+    while ( counter < places){
+      factor *= 10;
+      counter += 1;
+    }
+  }
+  var result = 0;
+  if(input*factor%1 < 0.5) result = input - input*factor%1/factor;
+  else result = input + 1/factor - input*factor%1/factor;
+  if (result*factor%1) return round(result, places);
+  return result;
+}
+function weather_decode(decoded, bytes){
+  T = ( bytes[0] / (255/50) ) - 10;
+  W = bytes[1] / (255/40);
+  H = (bytes[2]>>4) / (16/100);
+  C = (bytes[2] & 0x0F) / (16/100);
+  decoded.temperature = round(T, 1);
+  decoded.wind = round(W, 1);
+  decoded.humidity = round(H, 0);
+  decoded.clouds = round(C, 0);
+  return decoded;
+}
+
+function Decoder(bytes, port) {
+  var decoded = {};
+
+  if (port === 2){
+    decoded = weather_decode(decoded, bytes);
+    decoded.sensor_trigger = 1;
+  }
+  if (port === 3){
+    decoded = weather_decode(decoded, bytes);
+    decoded.sensor_trigger = 0;
+  }
+
+  return decoded;
+}
