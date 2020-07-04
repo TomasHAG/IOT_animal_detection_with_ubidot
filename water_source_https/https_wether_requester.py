@@ -37,8 +37,8 @@ class requestHandler(BaseHTTPRequestHandler):
         W = hex(  int( w.wind()['speed'] * (255/40) ) )[2:].zfill(2)
 
         #calculate byte value for humidity and clud dencity
-        H = hex(  int( w.humidity * (16/100) ) )[2:].zfill(1)
-        C = hex(  int( w.clouds * (16/100) ) )[2:].zfill(1)
+        H = hex(  int( w.humidity * (15/100) ) )[2:].zfill(1)
+        C = hex(  int( w.clouds * (15/100) ) )[2:].zfill(1)
 
         print("hex to send: " + T + W + H + C) #show hex to send in console
 
