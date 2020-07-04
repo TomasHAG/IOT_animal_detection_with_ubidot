@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+
+  # simple myself setup
+  mysql:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: myRootPassword123
+      MYSQL_DATABASE: Db
+      MYSQL_USER: myDbUser
+      MYSQL_PASSWORD: myPassword123
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+
+  # grafana used for graphing mysql data
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - '80:3000'
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - ./data/grafana:/var/lib/grafana
+    environment:
+      GF_INSTALL_PLUGINS: percona-percona-app
+    restart: always
+
+  adminer:
+    image: adminer
+    ports:
+        - 8080:8080
